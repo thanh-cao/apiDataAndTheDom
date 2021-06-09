@@ -63,6 +63,6 @@ function writeToDocument(url) {
         pageButtons = createPageButtons(data.next, data.previous);
     }
 
-    dataTable.innerHTML = `<table>${tableHeader}${tableRows}</table>${pageButtons}`;
+    dataTable.innerHTML = `<table>${tableHeader}${tableRows}</table>${pageButtons}`.replace(/,/g, "");
   });
 }
