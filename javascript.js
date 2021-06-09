@@ -23,6 +23,18 @@ function createTableHeader(obj) {
   return `<tr>${tableHeader}</tr>`;
 }
 
+// Generate pagination buttons
+function createPageButtons(next, prev) {
+    if (next && prev) {
+        return `<button onclick="writeToDocument('${prev}')">Previous</button>
+                <button onclick="writeToDocument('${next}')">Next</button>`;
+    } else if (next && !prev) {
+        return `<button onclick="writeToDocument('${next}')">Next</button>`;
+    } else if (!next && prev) {
+        return `<button onclick="writeToDocument('${prev}')">Previous</button>`;
+    }
+}
+
 // Function to generate data table on button click
 function writeToDocument(url) {
   let dataTable = document.getElementById("data");
@@ -32,7 +44,8 @@ function writeToDocument(url) {
     const dataArray = data.results;
     let tableHeader = createTableHeader(dataArray[0]);
     let tableRows = [];
-
+    let pageButtons = "";
+    
     dataArray.forEach(item => {
       let dataRow = [];
 
@@ -46,6 +59,10 @@ function writeToDocument(url) {
       tableRows.push(`<tr>${dataRow}</tr>`);
     });
 
-    dataTable.innerHTML = `<table>${tableHeader}${tableRows}</table>`;
+    if (data.next || data.previous) {
+        pageButtons = createPageButtons(data.next, data.previous);
+    }
+
+    dataTable.innerHTML = `<table>${tableHeader}${tableRows}</table>${pageButtons}`;
   });
 }
