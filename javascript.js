@@ -12,3 +12,40 @@ function getData(url, callbackFunc) {
   xhr.open("GET", url);
   xhr.send();
 }
+
+// Create table header by iterating through object's keys and create <th> based on each key
+function createTableHeader(obj) {
+  let tableHeader = [];
+
+  Object.keys(obj).forEach(key => {
+    tableHeader.push(`<th>${key}</th>`);
+  });
+  return `<tr>${tableHeader}</tr>`;
+}
+
+// Function to generate data table on button click
+function writeToDocument(url) {
+  let dataTable = document.getElementById("data");
+  dataTable.innerHTML = ""; // clear current data table before generating a new one
+
+  getData(url, data => {
+    const dataArray = data.results;
+    let tableHeader = createTableHeader(dataArray[0]);
+    let tableRows = [];
+
+    dataArray.forEach(item => {
+      let dataRow = [];
+
+      Object.keys(item).forEach(key => {
+        dataRow.push(`<td>${item[key]}</td>`);
+        // Optional to truncate data
+        // let truncatedData = item[key].toString().substring(0, 15);
+        // dataRow.push(`<td>${truncatedData}</td>`);
+      });
+
+      tableRows.push(`<tr>${dataRow}</tr>`);
+    });
+
+    dataTable.innerHTML = `<table>${tableHeader}${tableRows}</table>`;
+  });
+}
